@@ -1,0 +1,23 @@
+# Template file for 'zaproxy-bin'
+pkgname=zaproxy-bin
+version=2.17.0
+revision=1
+archs="x86_64"
+build_style=fetch
+hostmakedepends="tar"
+depends="openjdk17-jre"
+short_desc="OWASP Zed Attack Proxy - web application security testing tool"
+maintainer="rayfadh <rayfadh@duck.com>"
+license="Apache-2.0"
+homepage="https://www.zaproxy.org"
+distfiles="https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz"
+checksum=efe799aaa3627db683b43f00c9c210aea0b75c00cc8f0a0f0434d12bb3ddde5a
+
+do_install() {
+	tar xzf ZAP_${version}_Linux.tar.gz
+	vmkdir usr/share/zaproxy
+	vcopy "ZAP_${version}/*" usr/share/zaproxy/
+	vbin ${FILESDIR}/zaproxy
+	vinstall ${FILESDIR}/zaproxy.desktop 644 usr/share/applications
+	vinstall "ZAP_${version}/zap.ico" 644 usr/share/pixmaps zaproxy.ico
+}

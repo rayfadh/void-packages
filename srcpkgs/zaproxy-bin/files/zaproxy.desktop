@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=OWASP ZAP
+GenericName=Web Application Security Scanner
+Comment=Test web applications for security vulnerabilities
+Exec=zaproxy
+Icon=zaproxy.ico
+Terminal=false
+Categories=Development;Security;Network;
+Keywords=security;testing;penetration;proxy;scanner;owasp;
+StartupWMClass=org-zaproxy-zap-ZAP
