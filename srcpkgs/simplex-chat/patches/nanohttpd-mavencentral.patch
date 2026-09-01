@@ -1,0 +1,15 @@
+# use org.nanohttpd from mavenCentral instead of jitpack efb2ebf
+# jitpack build for com.github.NanoHttpd:nanohttpd:efb2ebf fails server-side
+--- a/apps/multiplatform/common/build.gradle.kts
++++ b/apps/multiplatform/common/build.gradle.kts
+@@ -149,8 +149,8 @@
+       dependencies {
+         implementation("uk.co.caprica:vlcj:4.8.3")
+         implementation("net.java.dev.jna:jna:5.14.0")
+-        implementation("com.github.NanoHttpd.nanohttpd:nanohttpd:efb2ebf")
+-        implementation("com.github.NanoHttpd.nanohttpd:nanohttpd-websocket:efb2ebf")
++        implementation("org.nanohttpd:nanohttpd:2.3.1")
++        implementation("org.nanohttpd:nanohttpd-websocket:2.3.1")
+         implementation("com.squareup.okhttp3:okhttp:4.12.0")
+       }
+     }
