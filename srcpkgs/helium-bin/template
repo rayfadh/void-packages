@@ -1,0 +1,52 @@
+# Template file for 'helium-bin'
+pkgname=helium-bin
+version=0.19.2.1
+revision=1
+archs="x86_64 aarch64"
+depends="alsa-lib cups dbus desktop-file-utils gtk+3 hicolor-icon-theme libpulseaudio libva libXScrnSaver nss xdg-utils"
+short_desc="Private, fast, and honest web browser based on Chromium"
+maintainer="rayfadh <rayfadh@duck.com>"
+license="GPL-3.0-only AND BSD-3-Clause"
+homepage="https://github.com/imputnet/helium-linux"
+repository=nonfree
+nostrip=yes
+skiprdeps="/opt/helium/libEGL.so /opt/helium/libGLESv2.so /opt/helium/libqt5_shim.so /opt/helium/libqt6_shim.so /opt/helium/libvk_swiftshader.so /opt/helium/libvulkan.so.1"
+
+case "$XBPS_TARGET_MACHINE" in
+x86_64)
+	wrksrc="helium-${version}-x86_64_linux"
+	distfiles="https://github.com/imputnet/helium-linux/releases/download/${version}/helium-${version}-x86_64_linux.tar.xz"
+	checksum=707cf319e3a3d2aa061ca15d754877bd18b8b289208738c829fcb0873bc7ecdb
+	;;
+aarch64)
+	wrksrc="helium-${version}-arm64_linux"
+	distfiles="https://github.com/imputnet/helium-linux/releases/download/${version}/helium-${version}-arm64_linux.tar.xz"
+	checksum=6cb0205b8b4fd8eba47fea38b2fcd3bd73e515bc5606abe2aaf7586a57a3e68b
+	;;
+*)
+	broken="No distfiles available for this target"
+	;;
+esac
+
+post_extract() {
+	vsed -e 's/CHROME_VERSION_EXTRA="custom"/CHROME_VERSION_EXTRA="void"/' -i helium-wrapper
+}
+
+do_install() {
+	vmkdir opt/helium
+	vcopy "*" opt/helium
+
+	vmkdir usr/bin
+	ln -s /opt/helium/helium-wrapper ${DESTDIR}/usr/bin/helium
+
+	vinstall helium.desktop 644 usr/share/applications helium.desktop
+	vsed -e 's,^Exec=helium$,Exec=/usr/bin/helium,' \
+		-e 's,^Exec=helium %U$,Exec=/usr/bin/helium %U,' \
+		-e 's,^Exec=helium --incognito$,Exec=/usr/bin/helium --incognito,' \
+		-i ${DESTDIR}/usr/share/applications/helium.desktop
+
+	vinstall product_logo_256.png 644 usr/share/icons/hicolor/256x256/apps helium.png
+	vinstall product_logo_256.png 644 usr/share/pixmaps helium.png
+
+	vlicense "${FILESDIR}/LICENSE.ungoogled_chromium"
+}
